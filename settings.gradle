@@ -1,4 +1,5 @@
 rootProject.name = 'aritzh'
 include 'aritzh-core'
 include 'aritzh-awt'
+include 'aritzh-db'
 

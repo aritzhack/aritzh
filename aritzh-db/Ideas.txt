@@ -1,0 +1,15 @@
+
+- DB stored in a ZIP file (7-zip?). It will hold a main DB-file, and all the table-files.
+
+- Main file lists tables
+	+ Maybe will hold some kind of user- or DB-properties at some point
+
+- Each table will have its own file
+	+ Any extra info about the whole table may belong here
+	+ First line will contain column count and names (e.g. "3, id, name, phone, email")
+	+ Or here
+	+ Second line will contain each columns' info (e.g. "int:master, string, int:9, string:"\\w+@\\w+\\.\\w+"")
+		* id will be the master column, name will be a String, phone will be a 9-digit number, and email will be a string that must comply the given regex
+	+ Or here
+	+ Following lines will be entries
+	+ Debating if general Object-s are allowed (Object(In/Out)putStream). In case they are, they will each be in its own file(?) so that they can be only read when necessary
