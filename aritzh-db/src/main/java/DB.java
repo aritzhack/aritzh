@@ -57,10 +57,12 @@ public class DB {
 				columns[i] = new Column(columnNames[i], columnType[i]);
 			}
 
+			Table table = new Table(columns);
+
 			String line;
 			while((line = br.readLine()) != null) {
 				String[] values = line.split(",");
-
+				table.addEntry(values);
 			}
 
 		} catch (IOException e) {
@@ -72,61 +74,5 @@ public class DB {
 		}
 
 		return db;
-	}
-
-	private enum ColumnType {
-		INT("int"), DATE("date"), STRING("string");
-
-		private static final Map<String, ColumnType> nameToType = Maps.newHashMap();
-
-		static {
-			for(ColumnType ct : ColumnType.values()) {
-				nameToType.put(ct.getName(), ct);
-			}
-		}
-
-		private final String name;
-
-		ColumnType(String name) {
-			this.name = name;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public static ColumnType parse(String name) {
-			final String name2 = name.trim().toLowerCase();
-			if (nameToType.containsKey(name2)) {
-				return nameToType.get(name2);
-			}
-			throw new FormatException("Column type \"" + name + "\" could not be recognised");
-		}
-	}
-
-	private static class Column {
-		private String name;
-		private ColumnType type;
-		private String[] formatArgs;
-
-		public Column(String name, String format) {
-			this.name = name;
-			String[] tokens = format.split(":");
-			this.type = ColumnType.parse(tokens[0]);
-			this.formatArgs = new String[tokens.length - 1];
-			System.arraycopy(tokens, 1, this.formatArgs, 0, tokens.length - 1);
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public ColumnType getType() {
-			return type;
-		}
-
-		public String[] getFormatArgs() {
-			return formatArgs;
-		}
 	}
 }
