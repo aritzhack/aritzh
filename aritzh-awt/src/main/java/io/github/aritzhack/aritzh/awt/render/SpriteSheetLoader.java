@@ -44,39 +44,21 @@ public class SpriteSheetLoader {
 
 		InputStream is = SpriteSheetLoader.class.getClassLoader().getResourceAsStream(shtFile);
 		Preconditions.checkArgument(is != null, "Could not find file %s", shtFile);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		try {
-			return load(is);
-		} catch (FileNotFoundException e) {
-			throw new IllegalArgumentException("Error loading sprite sheet from: " + shtFile, e);
-		}
-	}
+			String line = reader.readLine();
+			if (line == null) throw new IllegalArgumentException("First line of the file could not be read");
+			InputStream imageStream = SpriteSheetLoader.class.getClassLoader().getResourceAsStream(line.trim());
 
-	public static SpriteSheet load(File file) throws FileNotFoundException {
-		Preconditions.checkArgument(file != null, "File name cannot be null!");
-		InputStream is = new FileInputStream(file);
-
-		InputStream imageStream;
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
-			imageStream = new FileInputStream(new File(file.getParentFile(), reader.readLine()));
-		} catch (IOException e) {
-			throw new IllegalArgumentException("Error loading sprite sheet from: " + file, e);
-		}
-		return load(new FileInputStream(file), imageStream);
-	}
-
-	public static SpriteSheet load(InputStream shtStream, InputStream imageStream) throws FileNotFoundException {
-
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(shtStream))) {
 
 			BufferedImage sheet = ImageIO.read(imageStream);
+
 			SpriteSheet sprites = new SpriteSheet();
-			String line;
 
 			while ((line = reader.readLine()) != null) {
 				Matcher matcher = spritePattern.matcher(line);
-				if (line.matches("\\w+\\.png")) continue;
 				if (!matcher.matches())
-					throw new IllegalArgumentException("Line \"" + line + "\" does not match regex \"" + spritePattern.pattern() + "\"");
+					throw new IllegalArgumentException("Line " + line + " does not match regex " + spritePattern.pattern());
 				String name = matcher.group(1);
 				int x = Integer.parseInt(matcher.group(2));
 				int y = Integer.parseInt(matcher.group(3));
@@ -87,29 +69,7 @@ public class SpriteSheetLoader {
 
 			return sprites;
 		} catch (IOException e) {
-			throw new IllegalArgumentException("Error loading sprite sheet", e);
-		}
-	}
-
-	public static SpriteSheet load(InputStream is) throws FileNotFoundException {
-		Preconditions.checkArgument(is != null, "InputStream must not be null!");
-
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
-			String line = reader.readLine();
-			if (line == null) throw new IllegalArgumentException("First line of the file could not be read");
-			InputStream imageStream = SpriteSheetLoader.class.getClassLoader().getResourceAsStream(line.trim());
-			if (imageStream == null) {
-				File image = new File(line.trim());
-				if (!image.exists()) {
-					throw new FileNotFoundException("Spritesheet image file \"" + line.trim() + "\" could not be found");
-				} else {
-					imageStream = new FileInputStream(image);
-				}
-			}
-
-			return load(is, imageStream);
-		} catch (IOException e) {
-			throw new IllegalArgumentException("Error loading sprite sheet", e);
+			throw new IllegalArgumentException("Error loading sprite sheet: " + shtFile, e);
 		}
 	}
 
@@ -118,16 +78,5 @@ public class SpriteSheetLoader {
 		return new Sprite(w, h, pixels);
 	}
 
-	public static void writeSheet(Map<Sprite, String> sprites, File shtFile) throws IOException {
-		Set2<Sprite, Map<String, Rectangle>> sheetData = SpriteUtil.packSprites(sprites);
-		Sprite sheet = sheetData.getT();
-		String fileName = Files.getNameWithoutExtension(shtFile.getAbsolutePath());
-		String shtFileContents = fileName + ".png\n" + SpriteUtil.sheetMapToString(sheetData.getU());
-
-		ImageIO.write(SpriteUtil.toImage(sheet), "png", new File(shtFile.getParentFile(), fileName + ".png"));
-		Files.write(shtFileContents, shtFile, Charsets.UTF_8);
-	}
-
-	public static class SpriteSheet extends HashMap<String, Sprite> {
-	}
+	public static class SpriteSheet extends HashMap<String, Sprite> {}
 }

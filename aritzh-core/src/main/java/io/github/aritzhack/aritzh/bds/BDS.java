@@ -592,10 +592,14 @@ public class BDS {
 	 * @return whether the string was added or not. In case it is false, it will be because the name has already been taken for this BDS.
 	 */
 	public boolean addString(String name, String value) {
-		if (takenNames.contains(name)) return false;
+		if (isTaken(name)) return false;
 		takenNames.add(name);
 		strings.put(name, value);
 		return true;
+	}
+
+	private boolean isTaken(String name) {
+		return takenNames.contains(name);
 	}
 
 	/**
@@ -606,7 +610,7 @@ public class BDS {
 	 * @return whether the byte was added or not. In case it is false, it will be because the name has already been taken for this BDS.
 	 */
 	public boolean addByte(String name, byte value) {
-		if (takenNames.contains(name)) return false;
+		if (isTaken(name)) return false;
 		takenNames.add(name);
 		bytes.put(name, value);
 		return true;
@@ -620,7 +624,7 @@ public class BDS {
 	 * @return whether the int was added or not. In case it is false, it will be because the name has already been taken for this BDS.
 	 */
 	public boolean addInt(String name, int value) {
-		if (takenNames.contains(name)) return false;
+		if (isTaken(name)) return false;
 		takenNames.add(name);
 		ints.put(name, value);
 		return true;
@@ -634,7 +638,7 @@ public class BDS {
 	 * @return whether the short was added or not. In case it is false, it will be because the name has already been taken for this BDS.
 	 */
 	public boolean addShort(String name, short value) {
-		if (takenNames.contains(name)) return false;
+		if (isTaken(name)) return false;
 		takenNames.add(name);
 		shorts.put(name, value);
 		return true;
@@ -648,7 +652,7 @@ public class BDS {
 	 * @return whether the long was added or not. In case it is false, it will be because the name has already been taken for this BDS.
 	 */
 	public boolean addLong(String name, long value) {
-		if (takenNames.contains(name)) return false;
+		if (isTaken(name)) return false;
 		takenNames.add(name);
 		longs.put(name, value);
 		return true;
@@ -662,7 +666,7 @@ public class BDS {
 	 * @return whether the float was added or not. In case it is false, it will be because the name has already been taken for this BDS.
 	 */
 	public boolean addFloat(String name, float value) {
-		if (takenNames.contains(name)) return false;
+		if (isTaken(name)) return false;
 		takenNames.add(name);
 		floats.put(name, value);
 		return true;
@@ -676,7 +680,7 @@ public class BDS {
 	 * @return whether the double was added or not. In case it is false, it will be because the name has already been taken for this BDS.
 	 */
 	public boolean addDouble(String name, double value) {
-		if (takenNames.contains(name)) return false;
+		if (isTaken(name)) return false;
 		takenNames.add(name);
 		doubles.put(name, value);
 		return true;
@@ -689,7 +693,7 @@ public class BDS {
 	 * @return whether the BDS was added or not. In case it is false, it will be because the name has already been taken for this BDS.
 	 */
 	public boolean addBDS(BDS value) {
-		if (takenNames.contains(value.name)) return false;
+		if (isTaken(value.name)) return false;
 		takenNames.add(value.name);
 		bdss.put(value.name, value);
 		return true;
@@ -703,7 +707,7 @@ public class BDS {
 	 * @return whether the array was added or not. In case it is false, it will be because the name has already been taken for this BDS.
 	 */
 	public boolean addStrings(String name, String[] values) {
-		if (takenNames.contains(name)) return false;
+		if (isTaken(name)) return false;
 		takenNames.add(name);
 		stringArrays.put(name, values);
 		return true;
@@ -717,7 +721,7 @@ public class BDS {
 	 * @return whether the array was added or not. In case it is false, it will be because the name has already been taken for this BDS.
 	 */
 	public boolean addBytes(String name, byte[] values) {
-		if (takenNames.contains(name)) return false;
+		if (isTaken(name)) return false;
 		takenNames.add(name);
 		byteArrays.put(name, ArrayUtil.box(values));
 		return true;
@@ -731,7 +735,7 @@ public class BDS {
 	 * @return whether the array was added or not. In case it is false, it will be because the name has already been taken for this BDS.
 	 */
 	public boolean addInts(String name, int[] values) {
-		if (takenNames.contains(name)) return false;
+		if (isTaken(name)) return false;
 		takenNames.add(name);
 		intArrays.put(name, ArrayUtil.box(values));
 		return true;
@@ -745,7 +749,7 @@ public class BDS {
 	 * @return whether the array was added or not. In case it is false, it will be because the name has already been taken for this BDS.
 	 */
 	public boolean addShorts(String name, short[] values) {
-		if (takenNames.contains(name)) return false;
+		if (isTaken(name)) return false;
 		takenNames.add(name);
 		shortArrays.put(name, ArrayUtil.box(values));
 		return true;
@@ -759,7 +763,7 @@ public class BDS {
 	 * @return whether the array was added or not. In case it is false, it will be because the name has already been taken for this BDS.
 	 */
 	public boolean addLongs(String name, long[] values) {
-		if (takenNames.contains(name)) return false;
+		if (isTaken(name)) return false;
 		takenNames.add(name);
 		longArrays.put(name, ArrayUtil.box(values));
 		return true;
@@ -773,7 +777,7 @@ public class BDS {
 	 * @return whether the array was added or not. In case it is false, it will be because the name has already been taken for this BDS.
 	 */
 	public boolean addFloats(String name, float[] values) {
-		if (takenNames.contains(name)) return false;
+		if (isTaken(name)) return false;
 		takenNames.add(name);
 		floatArrays.put(name, ArrayUtil.box(values));
 		return true;
@@ -787,7 +791,7 @@ public class BDS {
 	 * @return whether the array was added or not. In case it is false, it will be because the name has already been taken for this BDS.
 	 */
 	public boolean addDoubles(String name, double[] values) {
-		if (takenNames.contains(name)) return false;
+		if (isTaken(name)) return false;
 		takenNames.add(name);
 		doubleArrays.put(name, ArrayUtil.box(values));
 		return true;
@@ -801,7 +805,7 @@ public class BDS {
 	 * @return whether the array was added or not. In case it is false, it will be because the name has already been taken for this BDS.
 	 */
 	public boolean addBDSs(String name, BDS[] values) {
-		if (takenNames.contains(name)) return false;
+		if (isTaken(name)) return false;
 		takenNames.add(name);
 		bdsArrays.put(name, values);
 		return true;
